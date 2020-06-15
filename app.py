@@ -33,7 +33,7 @@ def index():
         if(use_cookie is not None):
             cookie = request.form.get('cookie')
             if cookie and not cookie.isspace():
-                parser = XSsearch(url=url,cookies=use_cookie)
+                parser = XSsearch(url=url,cookies=cookie)
                 parser.run()
                 return render_template('index.html', result=result)
             else:
@@ -42,6 +42,8 @@ def index():
             parser = XSsearch(url=url,cookies={})
             parser.run()
             result = parser.result
+            if(result == []):
+                return render_template('index.html', result="결과 반환에 실패하였습니다.")
             return render_template('index.html', result=result)
 
     if request.method == 'GET':
