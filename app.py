@@ -25,32 +25,33 @@ def check_url(url):
 
 @app.route('/', methods=["GET","POST"])
 def index():
-    # data save
-    if request.method == 'POST':
-        url = request.form.get('url')
-        req = urlopen(url)
-        if(req.status == 200):
-            print("good")
-        check_url(url)
-        use_cookie = request.form.get('use_cookie')
-    
-        if(use_cookie is not None):
-            cookie = request.form.get('cookie')
-            if cookie and not cookie.isspace():
-                parser = XSsearch(url=url,cookies=cookie)
-                parser.run()
-                return render_template('index.html', result=result)
-            else:
-                return '''cookie is none'''
-        else:
-            parser = XSsearch(url=url,cookies={})
-            parser.run()
-            result = parser.result
-            if(result == []):
-                return render_template('index.html', result="결과 반환에 실패하였습니다.")
-            return render_template('index.html', result=result)
+    try:
+        if request.method == 'GET':
+            return render_template('index.html')
 
-    if request.method == 'GET':
-        return render_template('index.html')
+        if request.method == 'POST':
+            url = request.form.get('url')
+            req = urlopen(url)
+            if(req.status == 200):
+                check_url(url)
+                use_cookie = request.form.get('use_cookie')
+    
+                if(use_cookie is not None):
+                    cookie = request.form.get('cookie')
+                    if cookie and not cookie.isspace():
+                        parser = XSsearch(url=url,cookies=cookie)
+                        parser.run()
+                        return render_template('index.html', result=result)
+                    else:
+                        return '''cookie is none'''
+                else:
+                    parser = XSsearch(url=url,cookies={})
+                    parser.run()
+                    result = parser.result
+                    if(result == []):
+                        return render_template('index.html', result="결과 반환에 실패하였습니다.")
+                    return render_template('index.html', result=result)
+    except ValueError as e:
+        return render_template('error.html')
 
 app.run('0.0.0.0',8000)
