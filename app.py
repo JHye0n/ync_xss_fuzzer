@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from core import *
 import re
 from flask import Flask,request,render_template,url_for,redirect
 
@@ -27,18 +28,22 @@ def index():
     # data save
     if request.method == 'POST':
         url = request.form.get('url')
+        print(url)
         use_cookie = request.form.get('use_cookie')
     
         if(use_cookie is not None):
             cookie = request.form.get('cookie')
             if cookie and not cookie.isspace():
-                url = check_url(url)
-                return render_template('index.html', url=url, cookie=cookie)
+                parser = XSsearch(url=url,cookies=use_cookie)
+                parser.run()
+                return render_template('index.html', result=result)
             else:
                 return '''cookie is none'''
         else:
-            url = check_url(url)
-            return render_template('index.html', url=url)
+            parser = XSsearch(url=url,cookies={})
+            parser.run()
+            result = parser.result
+            return render_template('index.html', result=result)
 
     if request.method == 'GET':
         return render_template('index.html')
