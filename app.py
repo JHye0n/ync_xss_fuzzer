@@ -3,6 +3,8 @@
 
 from core import *
 import re
+from urllib.request import urlopen
+from urllib.error import URLError, HTTPError
 from flask import Flask,request,render_template,url_for,redirect
 
 app = Flask(__name__)
@@ -18,16 +20,17 @@ def check_url(url):
             r'(?:/?|[/?]\S+)$', re.IGNORECASE)
         if(url is not None):
             return regex.search(url).group(0)
-        elif(url is None):
-            return '''please input'''
     except:
-        return '''error occured'''
+        None
 
 @app.route('/', methods=["GET","POST"])
 def index():
     # data save
     if request.method == 'POST':
         url = request.form.get('url')
+        req = urlopen(url)
+        if(req.status == 200):
+            print("good")
         check_url(url)
         use_cookie = request.form.get('use_cookie')
     
