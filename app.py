@@ -2,10 +2,10 @@
 #!/usr/bin/python3
 
 from core import *
-import re
 from urllib.request import urlopen
 from urllib.error import URLError, HTTPError
 from flask import Flask,request,render_template,url_for,redirect
+import re
 
 app = Flask(__name__)
 
@@ -49,7 +49,11 @@ def index():
                     parser.run()
                     result = parser.result
                     return render_template('index.html', result=result)
+
+    except HTTPError as e:
+        return render_template('url_error.html')
+                
     except ValueError as e:
-        return render_template('error.html')
+        return render_template('url_error.html')
 
 app.run('0.0.0.0',8000)
