@@ -15,20 +15,17 @@ def check_url(url):
             r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'
             r'(?::\d+)?'
             r'(?:/?|[/?]\S+)$', re.IGNORECASE)
-
         if(url is not None):
-            return regex.search(url).group(0)
-        elif(url is None):
-            return '''please input'''
+            return regex.search(url).group(0) 
     except:
-        return '''error occured'''
+        url = None
 
 @app.route('/', methods=["GET","POST"])
 def index():
     # data save
     if request.method == 'POST':
         url = request.form.get('url')
-        print(url)
+        url = check_url(url)
         use_cookie = request.form.get('use_cookie')
     
         if(use_cookie is not None):
