@@ -1,3 +1,4 @@
+#dev by, jhyeon(stjhyeon@kakao.com) & nga & seonghyun park
 #!/usr/bin/python3
 
 from core import *
