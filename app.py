@@ -48,8 +48,6 @@ def index():
                     parser = XSsearch(url=url,cookies={})
                     parser.run()
                     result = parser.result
-                    if(result == []):
-                        return render_template('index.html', result="결과 반환에 실패하였습니다.")
                     return render_template('index.html', result=result)
     except ValueError as e:
         return render_template('error.html')
