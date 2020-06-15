@@ -7,19 +7,15 @@ from flask import Flask,request,render_template,url_for,redirect
 app = Flask(__name__)
 
 def check_url(url):
-    try:
-        regex = re.compile(
-            r'^https?://'
-            r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|'
-            r'localhost|'
-            r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'
-            r'(?::\d+)?'
-            r'(?:/?|[/?]\S+)$', re.IGNORECASE)
-        if(url is not None):
-            return regex.search(url).group(0) 
-    except:
-        None
-        #return redirect(url_for('error_page'))
+    regex = re.compile(
+        r'^https?://'
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|'
+        r'localhost|'
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'
+        r'(?::\d+)?'
+        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+    if(url is not None):
+        return regex.search(url).group(0) 
 
 @app.route('/error', methods=["GET"])
 def error_page():
