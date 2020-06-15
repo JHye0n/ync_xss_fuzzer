@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<title> XSS </title>
+	</head>
+	<body>
+		<form method="post">
+			<input type="text" name="url" placeholder="url" required>
+			<input type="checkbox" name="use_cookie">
+			<input type="text" name="cookie" placholder="cookie">
+			<button type="submit">submit</button>
+		</form>
+		<hr>
+		<h5> result </h5>
+		{{ url }} <br>
+		{{ use_cookie }} <br>
+		{{ cookie }}
+	</body>
+</html>
