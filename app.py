@@ -18,7 +18,12 @@ def check_url(url):
         if(url is not None):
             return regex.search(url).group(0) 
     except:
-        url = None
+        None
+        #return redirect(url_for('error_page'))
+
+@app.route('/error', methods=["GET"])
+def error_page():
+    return render_template('error.html')
 
 @app.route('/', methods=["GET","POST"])
 def index():
