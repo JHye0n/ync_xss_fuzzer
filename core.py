@@ -74,7 +74,7 @@ def get_html(url, cookies):
 		
 		cookies = tmp_cookies
 		
-	res = get(url,cookies=cookies,timeout=1)
+	res = get(url,cookies=cookies,timeout=5)
 
 
 	html = res.text

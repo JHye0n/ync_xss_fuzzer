@@ -56,4 +56,7 @@ def index():
     except ValueError as e:
         return render_template('url_error.html')
 
+    except URLError as e:
+        return render_template('url_error.html')
+
 app.run('0.0.0.0',8000)
