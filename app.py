@@ -41,6 +41,7 @@ def index():
                     if cookie and not cookie.isspace():
                         parser = XSsearch(url=url,cookies=cookie)
                         parser.run()
+                        result = parser.result
                         return render_template('index.html', result=result)
                     else:
                         return '''cookie is none'''
