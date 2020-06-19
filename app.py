@@ -44,7 +44,7 @@ def index():
                         result = parser.result
                         return render_template('index.html', result=result)
                     else:
-                        return '''cookie is none'''
+                        return render_template('error/cookie_error.html')
                 else:
                     parser = XSsearch(url=url,cookies={})
                     parser.run()
@@ -52,12 +52,12 @@ def index():
                     return render_template('index.html', result=result)
 
     except HTTPError as e:
-        return render_template('url_error.html')
+        return render_template('error/url_error.html')
                 
     except ValueError as e:
-        return render_template('url_error.html')
+        return render_template('error/url_error.html')
 
     except URLError as e:
-        return render_template('url_error.html')
+        return render_template('error/url_error.html')
 
 app.run('0.0.0.0',8000)
