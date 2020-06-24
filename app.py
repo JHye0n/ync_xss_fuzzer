@@ -5,9 +5,9 @@ from core import *
 from urllib.parse import urlparse
 from urllib.error import URLError, HTTPError
 from flask import Flask,request,render_template,url_for,redirect,g
-from passlib.hash import sha256_crypt
 import re
 import sqlite3
+import hashlib
 
 app = Flask(__name__)
 DATABASE = 'users.db'
@@ -52,7 +52,7 @@ def login():
 
     db = load_db()
     cursor = db.cursor()
-    query = cursor.execute("SELECT * FROM users where username = ? AND password = ?", (username, sha256_crypt.encrypt(password))).fetchone()
+    query = cursor.execute("SELECT * FROM users where username = ? AND password = ?", (username, hashlib.sha256(password.encode()).hexdigest()))
 
     if query:
         return '''goood'''
@@ -66,13 +66,13 @@ def register():
 
     db = load_db()
     cursor = db.cursor()
-    query = cursor.execute("SELECT * FROM users where username = ?", (username)).fetchone()
+    query = cursor.execute("SELECT * FROM users where username = ?", (username,)).fetchone()
 
     if query:
         return '<script>alert("already exist account"); history.go(-1); </script>'
     else:
-        query = "INSERT INTO users(username, password) VALUES (?,?)"
-        query_exec = cursor.execute(query, (username, sha256_crypt.encrypt(password)))
+        query2 = "INSERT INTO users(username, password) VALUES (?,?)"
+        query_exec = cursor.execute(query2, (username, hashlib.sha256(password.encode()).hexdigest()))
         db.commit()
         return '''registeer ok'''
 
