@@ -45,11 +45,22 @@ def index():
 
 @app.route('/login', methods=["GET"])
 def login_page():
-    return render_template('login.html')
+    if session.get('user') is not None:
+        return render_template('main.html')
+    else:
+        return render_template('login.html')
+
+@app.route('/logout', methods=["GET"])
+def logout():
+    session.pop('user', None)
+    return render_template('index.html')
 
 @app.route('/register', methods=["GET"])
 def register_page():
-    return render_template('register.html')
+    if session.get('user') is not None:
+        return render_template('main.html')
+    else:
+        return render_template('register.html')
 
 @app.route('/api/login', methods=["POST"])
 def login():
