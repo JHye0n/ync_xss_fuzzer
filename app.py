@@ -38,7 +38,10 @@ def close_connection(exception):
 
 @app.route('/', methods=["GET","POST"])
 def index():
-    return render_template('index.html')
+    if session.get('user') is not None:
+        return render_template('main.html')
+    else:
+        return render_template('index.html')
 
 @app.route('/login', methods=["GET"])
 def login_page():
