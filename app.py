@@ -74,11 +74,14 @@ def register():
 
     if query:
         return '<script>alert("already exist account"); history.go(-1); </script>'
-    else:
-        query2 = "INSERT INTO users(username, password) VALUES (?,?)"
-        query_exec = cursor.execute(query2, (username, hashlib.sha256(password.encode()).hexdigest()))
-        db.commit()
-        return '''registeer ok'''
+
+    query2 = "INSERT INTO users(username, password) VALUES (?,?)"
+    query_exec = cursor.execute(query2, (username, hashlib.sha256(password.encode()).hexdigest()))
+    db.commit()
+    return render_template('login.html')
+
+    if not query_exec:
+        return '<script>alert("error occured"); history.go(-1); </script>'
 
 @app.route('/api/search', methods=["POST"])
 def search():
