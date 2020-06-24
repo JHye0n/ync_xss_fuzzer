@@ -26,26 +26,11 @@
 			</div>
 		  </nav><br>
 		<div class="col-lg-8">
-		<form action="/api/search" method="post">
-			<input type="text" class="form-control form-control-sm" name="url" placeholder="url" required><br>
-			<button type="submit" class="btn btn-success btn-sm">submit</button><br>
-			<hr>
-			cookie set : <input type="checkbox" name="use_cookie" onclick="cookie_check()" id="ck"><br>
-			<input type="hidden" class="form-control form-control-sm" name="cookie" placeholder="cookie data(sessid=???)" id="cki"><hr>
-		</form>
-		<h5> result </h5>
-		{{ result }}
-		</div>
+        <form action="/api/login" method="post">
+            <input type="text" name="username" class="form-control form-control-sm" placeholder="username" required><br>
+            <input type="password" name="password" class="form-control form-control-sm" placeholder="password" required><br>
+            <button type="submit" class="btn btn-success btn-sm">sign in</button>
+        </form>
+        </div>
 	</body>
-<script type="text/javascript">
-function cookie_check(){
-	var chk = document.getElementById('ck');
-		
-	if(chk.checked == true){
-		document.getElementById('cki').setAttribute('type', 'text');
-	}else{
-		document.getElementById('cki').setAttribute('type', 'hidden');
-	}
-}
-</script>
 </html>
