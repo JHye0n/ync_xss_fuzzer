@@ -94,14 +94,14 @@ def search():
                 parser = XSsearch(url=url,cookies=cookie)
                 parser.run()
                 result = parser.result
-                return render_template('index.html', result=result)
+                return render_template('main.html', result=result)
             else:
                 return render_template('error/cookie_error.html')
         else:
             parser = XSsearch(url=url,cookies={})
             parser.run()
             result = parser.result
-            return render_template('index.html', result=result)
+            return render_template('main.html', result=result)
     else:
         print('vaild url error')
 
