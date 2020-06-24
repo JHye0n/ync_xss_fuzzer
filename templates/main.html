@@ -26,10 +26,26 @@
 			</div>
 		  </nav><br>
 		<div class="col-lg-8">
-			<h5> Welcome XSearch </h5>
-			<h5> <a href="/login">Login</a></h5>
-			<h5> <a href="/register">Register</a></h5>
+		<form action="/api/search" method="post">
+			<input type="text" class="form-control form-control-sm" name="url" placeholder="url" required><br>
+			<button type="submit" class="btn btn-success btn-sm">submit</button><br>
+			<hr>
+			cookie set : <input type="checkbox" name="use_cookie" onclick="cookie_check()" id="ck"><br>
+			<input type="hidden" class="form-control form-control-sm" name="cookie" placeholder="cookie data(sessid=???)" id="cki"><hr>
 		</form>
-        </div>
+		<h5> result </h5>
+		{{ result }}
+		</div>
 	</body>
+<script type="text/javascript">
+function cookie_check(){
+	var chk = document.getElementById('ck');
+		
+	if(chk.checked == true){
+		document.getElementById('cki').setAttribute('type', 'text');
+	}else{
+		document.getElementById('cki').setAttribute('type', 'hidden');
+	}
+}
+</script>
 </html>

@@ -4,13 +4,15 @@
 from core import *
 from urllib.parse import urlparse
 from urllib.error import URLError, HTTPError
-from flask import Flask,request,render_template,url_for,redirect,g
+from flask import Flask,request,render_template,url_for,redirect,g,session
 import re
 import sqlite3
 import hashlib
+import os
 
 app = Flask(__name__)
 DATABASE = 'users.db'
+app.secret_key = os.urandom(24)
 
 def vaild_url(url):
     url_scheme = urlparse(url).scheme
@@ -25,6 +27,7 @@ def vaild_url(url):
 def load_db():
     if not hasattr(g, 'users.db'):
         db = sqlite3.connect(DATABASE)
+    db.row_factory = sqlite3.Row
     return db
 
 @app.teardown_appcontext
@@ -52,10 +55,11 @@ def login():
 
     db = load_db()
     cursor = db.cursor()
-    query = cursor.execute("SELECT * FROM users where username = ? AND password = ?", (username, hashlib.sha256(password.encode()).hexdigest()))
+    query = cursor.execute("SELECT * FROM users where username = ? AND password = ?", (username, hashlib.sha256(password.encode()).hexdigest())).fetchone()
 
     if query:
-        return '''goood'''
+        session['user'] = query['username']
+        return render_template('main.html')
     else:
         return '<script>alert("login failed"); history.go(-1); </script>'
 
