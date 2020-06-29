@@ -15,14 +15,20 @@ DATABASE = 'users.db'
 app.secret_key = os.urandom(24)
 
 def vaild_url(url):
+
     url_scheme = urlparse(url).scheme
     url_domain = urlparse(url).netloc
 
-    if(url_scheme != 'http','https'):
-        return render_template('/error/url_error.html')
+    if(url_scheme == ''):
+        return None
 
-    if(url_domain == 'localhost' or '127.0.0.1' or ' '):
-        return render_template('/error/url_error.html')
+    if(url_domain == ''):
+        return None
+
+    if(url_scheme == 'http' or url_scheme == 'https'):
+        if(url_domain == 'localhost' or url_domain == '127.0.0.1'):
+            return None
+    return url
 
 def load_db():
     if not hasattr(g, 'users.db'):
@@ -102,9 +108,8 @@ def search():
     url = request.form.get('url')
     use_cookie = request.form.get('use_cookie')
 
-    vaild_url(url)
-
-    if(vaild_url is not None):
+    v = vaild_url(url)
+    if(v is not None):
         if(use_cookie is not None):
             cookie = request.form.get('cookie')
             if cookie and not cookie.isspace():
@@ -120,6 +125,6 @@ def search():
             result = parser.result
             return render_template('main.html', result=result)
     else:
-        print('vaild url error')
+        return render_template('error/url_error.html')
 
 app.run('0.0.0.0',8000)
