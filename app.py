@@ -116,22 +116,18 @@ def search():
 
     check_url = vaild_url(url)
     if(check_url is not None):
-        if(use_cookie is not None):
-        #if(use_cookie == 'true'):
+        if(use_cookie == 'true'):
             cookie = request.form.get('cookie')
-            if cookie and not cookie.isspace():
-                parser = XSsearch(url=url,cookies=cookie)
-                parser.run()
-                result = parser.result
-                return render_template('main.html', result=result)
-            else:
-                return render_template('error/cookie_error.html')
+            parser = XSsearch(url=url,cookies=cookie)
+            parser.run()
+            result = parser.result
+            return json.dumps(result)
         else:
-        #elif(use_cookie == 'false'):
             parser = XSsearch(url=url,cookies={})
             parser.run()
+            result = parser.result
             return json.dumps(result)
     else:
-        return render_template('error/url_error.html')
+            return json.dumps({"success":"false"})
 
 app.run('0.0.0.0',8000)
