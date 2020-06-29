@@ -4,7 +4,7 @@
 from core import *
 from urllib.parse import urlparse
 from urllib.error import URLError, HTTPError
-from flask import Flask,request,render_template,url_for,redirect,g,session
+from flask import Flask,request,render_template,url_for,redirect,g,session,url_for
 import re
 import sqlite3
 import hashlib
@@ -28,7 +28,8 @@ def vaild_url(url):
     if(url_scheme == 'http' or url_scheme == 'https'):
         if(url_domain == 'localhost' or url_domain == '127.0.0.1'):
             return None
-    return url
+        else:
+            return url
 
 def load_db():
     if not hasattr(g, 'users.db'):
@@ -59,7 +60,7 @@ def login_page():
 @app.route('/logout', methods=["GET"])
 def logout():
     session.pop('user', None)
-    return render_template('index.html')
+    return redirect(url_for('index'))
 
 @app.route('/register', methods=["GET"])
 def register_page():
@@ -98,7 +99,7 @@ def register():
     query2 = "INSERT INTO users(username, password) VALUES (?,?)"
     query_exec = cursor.execute(query2, (username, hashlib.sha256(password.encode()).hexdigest()))
     db.commit()
-    return render_template('login.html')
+    return redirect(url_for('login_page'))
 
     if not query_exec:
         return '<script>alert("error occured"); history.go(-1); </script>'
@@ -108,9 +109,10 @@ def search():
     url = request.form.get('url')
     use_cookie = request.form.get('use_cookie')
 
-    v = vaild_url(url)
-    if(v is not None):
+    check_url = vaild_url(url)
+    if(check_url is not None):
         if(use_cookie is not None):
+        #if(use_cookie == 'true'):
             cookie = request.form.get('cookie')
             if cookie and not cookie.isspace():
                 parser = XSsearch(url=url,cookies=cookie)
@@ -120,6 +122,7 @@ def search():
             else:
                 return render_template('error/cookie_error.html')
         else:
+        #elif(use_cookie == 'false'):
             parser = XSsearch(url=url,cookies={})
             parser.run()
             result = parser.result
