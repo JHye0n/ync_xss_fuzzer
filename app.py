@@ -9,8 +9,9 @@ import re
 import sqlite3
 import hashlib
 import os
+import json
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path="/static/", static_folder="./templates/static/")
 DATABASE = 'users.db'
 app.secret_key = os.urandom(24)
 
@@ -49,6 +50,10 @@ def index():
         return render_template('main.html')
     else:
         return render_template('index.html')
+
+@app.route('/login2', methods=["GET"])
+def login2():
+    return render_template('login.html')
 
 @app.route('/login', methods=["GET"])
 def login_page():
@@ -125,8 +130,7 @@ def search():
         #elif(use_cookie == 'false'):
             parser = XSsearch(url=url,cookies={})
             parser.run()
-            result = parser.result
-            return render_template('main.html', result=result)
+            return json.dumps(result)
     else:
         return render_template('error/url_error.html')
 
