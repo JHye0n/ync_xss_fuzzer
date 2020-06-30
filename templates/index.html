@@ -5,12 +5,13 @@
         <title> XSSearch </title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
         <script src="static/js/index.js"></script>
+        <script src="static/js/prism.js"></script>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="static/css/loader.css">
         <link rel="stylesheet" href="static/css/search.css">
 	<link rel="stylesheet" href="static/css/modal.css">
+	<link rel="stylesheet" href="static/css/prism.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
  	 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 	
 	<style>
@@ -60,8 +61,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 	<div class="navbar"> 
-	  <a href="#"><i class="fa fa-fw fa-envelope"></i> Contact</a>
-	  <a href="#" onclick="$('#Login_modal').modal('show')"><i class="fa fa-fw fa-user" id="Login_button" ></i> Login</a>
+	  <a href="#" onclick="$('#Report_modal').modal('show');"><i class="fas fa-comment-dots"></i> Report</a>
+	  <a href="#Login" onclick="$('#Login_modal').modal('show')" id="login_out"><i class="fa fa-fw fa-user"></i> Login</a>
 	</div>
 
 	<div class="wrap">
@@ -81,52 +82,52 @@
         <div class="wrap-loading display-none">
             
             <div class="loader"></div>
-        
+
         </div>
 
-		<!-- Modal -->
+	<!-- result Modal -->
 		<div class="modal fade" id="Result_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
 		  <div class="modal-dialog" role="document">
 			<div class="modal-content">
 			  <div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLongTitle">XSsearch Result!</h5>
+
 			  </div>
 			  <div class="Result_modal-body">
 				  
 			  </div>
 			  <div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
+				
 			  </div>
 			</div>
 		  </div>
 		</div>
 
+	<!-- login modal -->
 		<div class="modal fade" id="Login_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalTitle" aria-hidden="true">
 		  <div class="modal-dialog" role="document">
 			<div class="modal-content">
 			  <div class="Login_modal-body" style="text-align: center;">
-					<div class="card align-middle" style="width:20rem; border-radius:20px; display: inline-block;">
+					<div class="card align-middle" style="width:40rem; border-radius:20px; display: inline-block;">
 
 						<div class="card-title" style="margin-top:30px;">
 							<h2 class="card-title text-center" style="color:#113366;">Login</h2>
 						</div>
 
 						<div class="card-body">
-							<form action="/api/login" method="POST">
 							<h5 class="form-signin-heading">로그인 정보를 입력하세요</h5>
 							<label for="inputEmail" class="sr-only">Your ID</label>
-							<input type="text" id="uid" name="username" class="form-control" placeholder="Your ID" required autofocus><BR>
+							<input type="text" id="Lusername" class="form-control" placeholder="Your ID" required autofocus><BR>
 							<label for="inputPassword" class="sr-only">Password</label>
-							<input type="password" id="upw" name="password" class="form-control" placeholder="Password" required><br>
+							<input type="password" id="Lpassword" class="form-control" placeholder="Password" onkeyup="if(event.keyCode == 13){login()}" required><br>
 							<div class="checkbox">
 							  <label>
 								<input type="checkbox" value="remember-me"> 기억하기
 							  </label>
 							</div>
-							<button id="Login" class="btn btn-lg btn-primary btn-block" type="submit">로 그 인</button><br>
-							Not registered?<a href="#register" onclick="$('#Login_modal').modal('hide');$('#Register_modal').modal('show')"><br>Create an account</a>
-						</form>
+							<button id="Login" class="btn btn-lg btn-primary btn-block" type="submit" onclick="login()">로 그 인</button>
+							<a href="#register" onclick="$('#Login_modal').modal('hide');$('#Register_modal').modal('show')">register</a>
 						</div>
 
 					</div>
@@ -137,27 +138,30 @@
 		  </div>
 		</div>
 
+	<!-- register modal -->
 	<div class="modal fade" id="Register_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalTitle" aria-hidden="true">
 		  <div class="modal-dialog" role="document">
 			<div class="modal-content">
-			  <div class="Login_modal-body" style="text-align: center;">
-					<div class="card align-middle" style="width:20rem; border-radius:20px; display: inline-block;">
+			  <div class="Register_modal-body" style="text-align: center;">
+					<div class="card align-middle" style="width:40rem; border-radius:20px; display: inline-block;">
 
 						<div class="card-title" style="margin-top:30px;">
 							<h2 class="card-title text-center" style="color:#113366;">Register</h2>
 						</div>
 
 						<div class="card-body">
-							<h5 class="form-signin-heading">회원가입 정보를 입력하세요</h5>
+							<h5 class="form-signin-heading">로그인 정보를 입력하세요</h5>
 							<label for="inputEmail" class="sr-only">Your ID</label>
-							<input type="text" id="register_uid" class="form-control" placeholder="Your ID" required autofocus><BR>
+							<input type="text" id="Rusername" class="form-control" placeholder="Your ID" required autofocus><BR>
 							<label for="inputPassword" class="sr-only">Password</label>
-							<input type="password" id="register_pw" class="form-control" placeholder="Password" required><br>
-							<input type="password" id="register_repw" class="form-control" placeholder="ConfirmPassword" required><br>
+							<input type="password" id="Rpassword" class="form-control" placeholder="Password" onkeyup="if(event.keyCode == 13){Register()}" required><br>
 							<div class="checkbox">
-
+							  <label>
+								<input type="checkbox" value="remember-me"> 기억하기
+							  </label>
 							</div>
-							<button id="Register" class="btn btn-lg btn-primary btn-block" type="submit">회원가입</button>
+							<button id="Login" class="btn btn-lg btn-primary btn-block" type="submit" onclick="Register()">회원가입</button>
+							<a href="#register" onclick="$('#Register_modal').modal('hide');$('#Login_modal').modal('show')" >Login</a>
 						</div>
 
 					</div>
@@ -166,6 +170,34 @@
 				</div>
 			</div>
 		  </div>
-		</div>
+	</div>
+	<script>$('#Report_modal').modal('show');</script>
+	<!-- report modal -->
+	<div class="modal fade" id="Report_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalTitle" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="Report_modal-body" style="text-align: center;">
+                                        <div class="card align-middle" style="width:50rem; border-radius:20px; display: inline-block;">
+
+                                                <div class="card-title" style="margin-top:30px;">
+                                                        <h2 class="card-title text-center" style="color:#113366;">Report</h2>
+                                                </div>
+
+                                                <div class="card-body">
+                                                        <h5 class="form-signin-heading">정상적으로 작동하지 않는 URL을 제보해주세요</h5>
+                                                        <label for="inputUrl" class="sr-only">Your ID</label>
+                                                        <input type="text" id="Rurl" class="form-control" placeholder="https://example.com" onkeyup="if(event.keyCode == 13){Report()}" required autofocus><BR>
+							<br>
+                                                        <button id="Login" class="btn btn-lg btn-primary btn-block" type="submit" onclick="Report()">제보하기</button>
+                                                </div>
+
+                                        </div>
+                                  <br>
+                                  <br>
+                                </div>
+                        </div>
+                  </div>
+        </div>
+
     </body>
 </html>
