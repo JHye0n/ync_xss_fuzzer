@@ -46,14 +46,7 @@ def close_connection(exception):
 
 @app.route('/', methods=["GET","POST"])
 def index():
-    if session.get('user') is not None:
-        return render_template('main.html')
-    else:
         return render_template('index.html')
-
-@app.route('/login2', methods=["GET"])
-def login2():
-    return render_template('login.html')
 
 @app.route('/login', methods=["GET"])
 def login_page():
@@ -111,6 +104,8 @@ def register():
 
 @app.route('/api/search', methods=["POST"])
 def search():
+    if session.get('user') is None:
+        return json.dumps({"login":"false"})
     url = request.form.get('url')
     use_cookie = request.form.get('use_cookie')
 
@@ -130,4 +125,4 @@ def search():
     else:
             return json.dumps({"success":"false"})
 
-app.run('0.0.0.0',8000)
+app.run('127.0.0.1',8000)
